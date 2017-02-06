@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="box box-primary">
+                <div class="box-header with-border text-center">
+                    <h3 class="box-title">Cadastrar Produto</h3>
+                </div>
+                <!-- /.box-header -->
+                <!-- form start -->
+                <form role="form" method="post" action="{% url "add_product" %}">{% csrf_token %}
+                    <div class="box-body">
+                        <div class="form-group">
+                            <label for="titulo">Titulo:</label>
+                            <input class="form-control input-lg" id="titulo" placeholder="Ex.:Eletronico" type="text"
+                                   name="titulo" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="sku">SKU:</label>
+                            <input class="form-control input-lg" id="sku" placeholder="Ex.:Unicode-23" type="text"
+                                   name="sku"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descricao">Quantidade:</label>
+                            <input class="form-control input-lg" id="qtd" placeholder="10" type="number"
+                                   name="qtd" min="0" max="100"
+                                   required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="descricao">Balcao:</label>
+                            <select class="form-control input-lg" name="balcao">
+                                {% for balcao in balcoes %}
+                                    <option value="{{ balcao.id }}">{{ balcao }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+
+                    <div class="box-footer">
+                        <a href="/" class="btn btn-default pull-left">Cancelar</a>
+                        <button type="submit" class="btn btn-primary pull-right">Cadastrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#add').addClass('active');
+        });
+    </script>
+    <!-- /.row -->
+{% endblock %}

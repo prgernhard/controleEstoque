@@ -1,0 +1,1 @@
+web: gunicorn controleEstoque.wsgi --log-file -
