@@ -1,12 +1,19 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, redirect, render
 
-
 # Create your views here.
 from django.template import RequestContext
 from app.models import Produto, Item, Balcao, Safra, Produtos,Servicos
+
+def convert_date(data):
+    # replace = data.replace('/', '-')
+    date = datetime.datetime.strptime(data, '%d/%m/%Y')
+    new_d = datetime.datetime.strftime(date, '%Y-%m-%d')
+    return new_d
 
 
 @login_required(login_url='/admin/login/')
@@ -99,34 +106,61 @@ def remove_produtos(request, id):
         return redirect('/')
 
 def edit_safra(request, id):
-    try:
-        safra = Safra.objects.get(id=id)
-        safra.delete()
-        messages.success(request, "Safra editada com sucesso")
-        return redirect('/')
-    except Item.DoesNotExist:
-        messages.error(request, "Houve algum erro")
-        return redirect('/')
+    user = getattr(request, 'user', None)
+    if request.method == 'GET':
+        return render(request, 'edit_safra.html', {'user':user, 'safra': Safra.objects.get(id=id)})
+    else:
+        try:
+            safra = Safra.objects.get(id=id)
+            safra.nome = request.POST['nome']
+            safra.codigo = request.POST['codigo']
+            safra.dtinicio = convert_date(request.POST['dtinicio'])
+            safra.dtfim = convert_date(request.POST['dtfim'])
+            safra.save()
+            messages.success(request, "Safra alterada com sucesso")
+        except:
+            messages.error(request, "Houve algum erro")
+            return redirect('/edit-safra/' + id)
+        return redirect('/lst-safra')
+
+
 
 def edit_servicos(request, id):
-    try:
-        servicos = Servicos.objects.get(id=id)
-        servicos.delete()
-        messages.success(request, "Servico editada com sucesso")
-        return redirect('/')
-    except Item.DoesNotExist:
-        messages.error(request, "Houve algum erro")
-        return redirect('/')
+    user = getattr(request, 'user', None)
+    if request.method == 'GET':
+        return render(request, 'edit_servicos.html', {'user':user, 'servicos': Servicos.objects.get(id=id)})
+    else:
+        try:
+            servicos          = Servicos.objects.get(id=id)
+            servicos.nome     = request.POST['nome']
+            servicos.dtinicio = convert_date(request.POST['dtinicio'])
+            servicos.dtfim    = convert_date(request.POST['dtfim'])
+            servicos.produto_id    = request.POST['produto_id']
+            servicos.qtdade   = request.POST['qtdade']
+            servicos.valor    = request.POST['valor']
+            servicos.save()
+            messages.success(request, "Servico alterado com sucesso")
+        except:
+            messages.error(request, "Houve algum erro")
+            return redirect('/edit-servicos/' + id)
+        return redirect('/lst-servicos')
 
 def edit_produtos(request, id):
-    try:
-        produtos = Produtos.objects.get(id=id)
-        produtos.delete()
-        messages.success(request, "Item de Produtos editado com sucesso")
-        return redirect('/')
-    except Item.DoesNotExist:
-        messages.error(request, "Houve algum erro")
-        return redirect('/')
+    user = getattr(request, 'user', None)
+    if request.method == 'GET':
+        return render(request, 'edit_produtos.html', {'user':user, 'produtos': Produtos.objects.get(id=id)})
+    else:
+        try:
+            produtos = Produtos.objects.get(id=id)
+            produtos.nome = request.POST['nome']
+
+            produtos.save()
+            messages.success(request, "Item Produtos editado com sucesso")
+        except:
+            messages.error(request, "Houve algum erro")
+            return redirect('/edit-produtos/' + id)
+        return redirect('/lst-produtos')
+
 
 @login_required(login_url='/admin/login/')
 def add_safra(request):

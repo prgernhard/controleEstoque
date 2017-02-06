@@ -21,7 +21,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^admin/login/$', auth_views.login),
-    url(r'^$', views.home, name='home'),
+    url(r'^$', views.lst_safra, name='lst_safra'),
     url(r'^add-product', views.add_product, name='add_product'),
     url(r'^lst-safra', views.lst_safra, name='lst_safra'),
     url(r'^lst-produtos', views.lst_produtos, name='lst_produtos'),
