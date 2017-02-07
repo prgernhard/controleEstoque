@@ -36,6 +36,7 @@ class Produtos(models.Model):
     def __unicode__(self):
         return "%s" % self.nome
 
+
 class Servicos(models.Model):
     nome = models.CharField(max_length=50)
     dtinicio = models.DateField()
@@ -69,3 +70,7 @@ class Item(TimeStamped):
 
     def __unicode__(self):
         return "%s" % self.produto.titulo
+
+
+
+

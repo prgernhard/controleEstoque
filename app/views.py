@@ -3,11 +3,12 @@ import datetime
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render_to_response, redirect, render
+from django.shortcuts import redirect, render
 
-# Create your views here.
-from django.template import RequestContext
+
 from app.models import Produto, Item, Balcao, Safra, Produtos,Servicos
+
+
 
 def convert_date(data):
     # replace = data.replace('/', '-')
